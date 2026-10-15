@@ -12,7 +12,6 @@ import ProjectCreatePage from './pages/ProjectCreatePage';
 import './App.css'
 
 function App() {
-
   return (
     <BrowserRouter>
       <Routes>
