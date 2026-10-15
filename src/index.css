@@ -84,6 +84,8 @@ a {
     }
 }
 
+/* Homepage.tsx */
+
 .welcome-section {
 margin-bottom: 28px;
 }
@@ -245,4 +247,202 @@ margin-bottom: 28px;
   .welcome-section h1 {
     font-size: 22px;
   }
+}
+
+/* ProjectPage.tsx */
+
+.pm-projects {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 24px 64px;
+    color: var(--text-primary, #f5f5f5);
+}
+
+.pm-projects__header {
+    margin-bottom: 32px;
+}
+
+.pm-projects__header h1 {
+    margin: 0 0 12px;
+    font-size: 30px;
+    font-weight: 700;
+}
+
+.pm-projects__header p {
+    margin: 0;
+    color: var(--text-secondary, #a3a3a3);
+    line-height: 1.6;
+}
+
+.pm-projects__search {
+    margin-bottom: 36px;
+}
+
+.pm-projects__search input {
+    width: 100%;
+    padding: 16px 18px;
+    border: 1px solid #383838;
+    border-radius: 10px;
+    outline: none;
+    background: #1c1c1c;
+    color: #f5f5f5;
+    font: inherit;
+}
+
+.pm-projects__search input:focus {
+    border-color: #818cf8;
+}
+
+.pm-projects__search input::placeholder {
+    color: #858585;
+}
+
+.pm-projects__list-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.pm-projects__list-header h2 {
+    margin: 0;
+    font-size: 20px;
+}
+
+.pm-projects__list-header span {
+    color: #a3a3a3;
+    font-size: 14px;
+}
+
+.pm-projects__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.pm-project-card {
+    min-width: 0;
+    padding: 24px;
+    border: 1px solid #333;
+    border-radius: 14px;
+    background: #1a1a1a;
+    transition: border-color 0.2s ease;
+}
+
+.pm-project-card:hover {
+    border-color: #666;
+}
+
+.pm-project-card__header {
+    margin-bottom: 16px;
+}
+
+.pm-project-card__status {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.pm-project-card__status.is-recruiting {
+    background: #173b2a;
+    color: #75d9a1;
+}
+
+.pm-project-card__status.is-closed {
+    background: #333;
+    color: #aaa;
+}
+
+.pm-project-card h3 {
+    margin: 0 0 10px;
+    font-size: 19px;
+}
+
+.pm-project-card__description {
+    min-height: 44px;
+    margin: 0 0 20px;
+    color: #aaa;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.pm-project-card__stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 24px;
+}
+
+.pm-project-card__stack span {
+    padding: 6px 9px;
+    border-radius: 6px;
+    background: #292929;
+    color: #ddd;
+    font-size: 12px;
+}
+
+.pm-project-card__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-top: 16px;
+    border-top: 1px solid #333;
+}
+
+.pm-project-card__footer > span {
+    color: #aaa;
+    font-size: 13px;
+}
+
+.pm-project-card__footer button {
+    padding: 9px 12px;
+    border: 0;
+    border-radius: 8px;
+    background: #6366f1;
+    color: white;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.pm-project-card__footer button:hover:not(:disabled) {
+    background: #4f46e5;
+}
+
+.pm-project-card__footer button:disabled {
+    background: #333;
+    color: #888;
+    cursor: not-allowed;
+}
+
+.pm-projects__empty {
+    padding: 64px 20px;
+    text-align: center;
+}
+
+.pm-projects__empty p {
+    margin: 0 0 10px;
+    font-weight: 600;
+}
+
+.pm-projects__empty span {
+    color: #999;
+    font-size: 14px;
+}
+
+@media (max-width: 768px) {
+    .pm-projects {
+        padding: 28px 16px 48px;
+    }
+
+    .pm-projects__grid {
+        grid-template-columns: 1fr;
+    }
+
+    .pm-projects__header h1 {
+        font-size: 25px;
+    }
 }
