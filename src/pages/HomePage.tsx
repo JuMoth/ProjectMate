@@ -32,7 +32,7 @@ function HomePage() {
   return (
     <div className="dashboard">
       <section className="welcome-section">
-        <h1>안녕하세요, **님! 👋</h1>
+        <h1>안녕하세요, JuMoth님! 👋</h1>
         <p>오늘도 좋은 프로젝트가 기다리고 있어요.</p>
       </section>
 
