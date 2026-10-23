@@ -46,15 +46,28 @@ const mockProjects: Project[] = [
 
 function ProjectsPage() {
     const [searchTerm, setSearchTerm] = useState("");
+    const [seletedTech, setSelectedTech] = useState("전체");
+    const [selectedStatus, setSelectedStatus] = useState("전체");
 
     const filteredProjects = mockProjects.filter((project) => {
         const keyword = searchTerm.toLowerCase();
 
-        return (
+        const matchesSearch =
             project.title.toLowerCase().includes(keyword) ||
             project.description.toLowerCase().includes(keyword) ||
-            project.techStack.some((tech) => tech.toLowerCase().includes(keyword))
-        )
+            project.techStack.some((tech) =>
+                tech.toLowerCase().includes(keyword)
+        );
+
+        const matchesTech = 
+            seletedTech === "전체" || 
+            project.techStack.includes(seletedTech);
+        
+        const matchesStatus =
+            selectedStatus === "전체" ||
+            project.recruitmentStatus === selectedStatus;
+
+        return matchesSearch && matchesTech && matchesStatus;
     })
 
     return (
@@ -74,6 +87,47 @@ function ProjectsPage() {
                     onChange={(e) => setSearchTerm(e.target.value)}
                     aria-label="프로젝트 검색"
                 />
+            </section>
+
+            <section className="pm-projects__filters">
+                <label>
+                    기술 스택
+                    <select
+                        value={seletedTech}
+                        onChange={(e) => setSelectedTech(e.target.value)}
+                    >
+                        <option value="전체">전체</option>
+                        <option value="React">React</option>
+                        <option value="TypeScript">TypeScript</option>
+                        <option value="Express">Express</option>
+                        <option value="Node.js">Node.js</option>
+                        <option value="Supabase">Supabase</option>
+                        <option value="PostgreSQL">PostgreSQL</option>
+                    </select>
+                </label>
+
+                <label>
+                    모집 상태
+                    <select
+                        value={selectedStatus}
+                        onChange={(e) => setSelectedStatus(e.target.value)}
+                    >
+                        <option value="전체">전체</option>
+                        <option value="모집 중">모집 중</option>
+                        <option value="모집 완료">모집 완료</option>
+                    </select>
+                </label>
+
+                <button
+                    type="button"
+                    onClick={() => {
+                        setSearchTerm("");
+                        setSelectedTech("전체");
+                        setSelectedStatus("전체");
+                    }}
+                >
+                    필터 초기화
+                </button>
             </section>
 
             <section className="pm-projects__list">
