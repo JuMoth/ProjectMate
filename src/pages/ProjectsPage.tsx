@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface Project {
     id: number;
@@ -48,6 +49,8 @@ function ProjectsPage() {
     const [searchTerm, setSearchTerm] = useState("");
     const [seletedTech, setSelectedTech] = useState("전체");
     const [selectedStatus, setSelectedStatus] = useState("전체");
+
+    const navigate = useNavigate();
 
     const filteredProjects = mockProjects.filter((project) => {
         const keyword = searchTerm.toLowerCase();
@@ -173,6 +176,7 @@ function ProjectsPage() {
                                     </span>
                                     <button
                                         type="button"
+                                        onClick={() => navigate(`/projects/${project.id}`)}
                                         disabled={
                                             project.recruitmentStatus ===
                                             "모집 완료"
