@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
+import "../styles/LoginPage.css";
+
 function LoginPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -46,7 +48,7 @@ function LoginPage() {
                     </div>
 
                     <div className="pm-login__options">
-                        <Link to="/find-password" className="pm-login__submit">비밀번호 찾기</Link>
+                        <Link to="/find-password">비밀번호 찾기</Link>
                     </div>
 
                     <button type="submit" className="pm-login__submit">
