@@ -1,5 +1,7 @@
 import { Link, useParams } from 'react-router-dom';
 
+import "../styles/ProjectDetailPage.css";
+
 interface Project {
     id: number;
     title: string;

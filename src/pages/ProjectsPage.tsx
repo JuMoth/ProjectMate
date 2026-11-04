@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import "../styles/ProjectsPage.css";
+
 interface Project {
     id: number;
     title: string;

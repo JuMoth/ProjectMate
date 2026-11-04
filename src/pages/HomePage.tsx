@@ -1,3 +1,5 @@
+import "../styles/HomePage.css";
+
 const projects = [
   {
     id: 1,
