@@ -1,0 +1,181 @@
+
+/* Overall Layout */
+
+.app-layout {
+    min-height: 100vh;
+}
+
+/* Sidebar */
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    width: 220px;
+    padding: 28px 16px;
+    background-color: #172033;
+    color: #ffffff;
+}
+
+.sidebar h2 {
+    margin: 0 0 36px;
+    padding: 0 8px;
+    font-size: 21px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+.sidebar nav {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.sidebar nav a {
+    display: flex;
+    align-items: center;
+    min-height: 42px;
+    padding: 0 12px;
+    border-radius: 7px;
+    color: #cbd5e1;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.sidebar nav a:hover {
+    background-color: #2d3b54;
+    color: #ffffff;
+}
+
+/* Main Content */
+
+.main-content {
+    min-height: 100vh;
+    margin-left: 220px;
+}
+
+/* Top Header */
+
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    height: 68px;
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #ffffff;
+    border-bottom: 1px solid #e5eaf1;
+}
+
+.header > span {
+    font-size: 15px;
+    font-weight: 700;
+    color: #172033;
+}
+
+.header div {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.header div a {
+    padding: 9px 15px;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 600;
+    transition: background-color 0.2s;
+}
+
+.header div a:first-child {
+    color: #475569;
+}
+
+.header div a:first-child:hover {
+    background-color: #f1f5f9;
+}
+
+.header div a:last-child {
+    background-color: #2563eb;
+    color: #ffffff;
+}
+
+.header div a:last-child:hover {
+    background-color: #1d4ed8;
+}
+
+/* Page Content */
+
+.page-content {
+    min-height: calc(100vh - 68px);
+    padding: 32px;
+}
+
+/* Tablet */
+
+@media (max-width: 768px) {
+    .sidebar {
+        width: 180px;
+        padding: 24px 12px;
+    }
+
+    .main-content {
+        margin-left: 180px;
+    }
+
+    .header {
+        padding: 0 20px;
+    }
+
+    .page-content {
+        padding: 24px 20px;
+    }
+}
+
+/* Mobile */
+
+@media (max-width: 480px) {
+    .sidebar {
+        position: static;
+        width: 100%;
+        height: auto;
+        padding: 16px;
+    }
+
+    .sidebar h2 {
+        margin-bottom: 16px;
+    }
+
+    .sidebar nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .sidebar nav a {
+        min-height: 36px;
+        padding: 0 10px;
+        font-size: 12px;
+    }
+
+    .main-content {
+        margin-left: 0;
+    }
+
+    .header {
+        height: 58px;
+        padding: 0 16px;
+    }
+
+    .page-content {
+        min-height: calc(100vh - 58px);
+        padding: 20px 16px;
+    }
+}
