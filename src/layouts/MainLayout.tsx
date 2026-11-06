@@ -1,4 +1,10 @@
-import { Outlet } from 'react-router-dom';
+import { NavLink, Outlet } from 'react-router-dom';
+import {
+    House,
+    FolderKanban,
+    Users,
+    UserRound,
+} from "lucide-react";
 
 import "./MainLayout.css";
 
@@ -9,16 +15,32 @@ function MainLayout() {
                 <h2>ProjectMate</h2>
 
                 <nav>
-                    <a href="/">홈</a>
-                    <a href="/projects">프로젝트</a>
-                    <a href="/projects/create">팀원 찾기</a>
-                    <a href="/mypage">마이페이지</a>
+                    <NavLink to="/" end>
+                        <House size={18} />
+                        <span>홈</span>
+                    </NavLink>
+
+                    <NavLink to="/projects">
+                        <FolderKanban size={18} />
+                        <span>프로젝트</span>
+                    </NavLink>
+
+                    <NavLink to="/projects/create">
+                        <Users size={18} />
+                        <span>팀원 찾기</span>
+                    </NavLink>
+
+                    <NavLink to="/mypage">
+                        <UserRound size={18} />
+                        <span>마이페이지</span>
+                    </NavLink>
                 </nav>
             </aside>
 
             <div className="main-content">
                 <header className="header">
                     <span>ProjectMate</span>
+                    
                     <div>
                         <a href="/login">로그인</a>
                         <a href="/signup">회원가입</a>
