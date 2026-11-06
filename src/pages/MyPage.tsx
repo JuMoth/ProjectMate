@@ -58,7 +58,7 @@ function MyPage() {
 
       {/* 프로필 영역 */}
       <section className="pm-mypage__profile">
-        <div className="pm-mypage__projile-header">
+        <div className="pm-mypage__profile-header">
           <div className="pm-mypage__avatar">{nickname.charAt(0)}</div>
           <div className="pm-mypage__profile-info">
             <h2>{nickname}</h2>
