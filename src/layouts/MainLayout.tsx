@@ -20,7 +20,7 @@ function MainLayout() {
                         <span>홈</span>
                     </NavLink>
 
-                    <NavLink to="/projects">
+                    <NavLink to="/projects" end>
                         <FolderKanban size={18} />
                         <span>프로젝트</span>
                     </NavLink>
@@ -40,7 +40,7 @@ function MainLayout() {
             <div className="main-content">
                 <header className="header">
                     <span>ProjectMate</span>
-                    
+
                     <div>
                         <a href="/login">로그인</a>
                         <a href="/signup">회원가입</a>
