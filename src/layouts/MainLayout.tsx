@@ -29,7 +29,7 @@ function MainLayout() {
             <span>프로젝트</span>
           </NavLink>
 
-          <NavLink to="/projects/create">
+          <NavLink to="/team-search">
             <Users size={18} />
             <span>팀원 찾기</span>
           </NavLink>

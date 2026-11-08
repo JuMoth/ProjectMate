@@ -10,6 +10,7 @@ import MyPage from "./pages/MyPage";
 import ProjectsPage from "./pages/ProjectsPage";
 import ProjectDetailPage from "./pages/ProjectDetailPage";
 import ProjectCreatePage from "./pages/ProjectCreatePage";
+import TeamSearchPage from "./pages/TeamSearchPage";
 
 import "./App.css";
 
@@ -22,6 +23,7 @@ function App() {
                     <Route path="/" element={<HomePage />} />
                     <Route path="/mypage" element={<MyPage />} />
                     <Route path="/projects" element={<ProjectsPage />} />
+                    <Route path="/team-search" element={<TeamSearchPage />} />
                     <Route
                         path="/projects/:id"
                         element={<ProjectDetailPage />}
