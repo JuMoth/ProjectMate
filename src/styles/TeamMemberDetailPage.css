@@ -1,0 +1,217 @@
+.team-member-detail-page {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 32px;
+}
+
+.team-member-detail-header {
+    margin-bottom: 32px;
+}
+
+.detail-back-link {
+    display: inline-block;
+    margin-bottom: 24px;
+    color: #64748b;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.detail-back-link:hover {
+    color: #2563eb;
+}
+
+.team-member-detail-header h1 {
+    margin-bottom: 8px;
+    color: #1e283b;
+    font-size: 28px;
+}
+
+.team-member-detail-header p {
+    color: #64748b;
+    font-size: 15px;
+}
+
+.team-member-detail-card {
+    padding: 32px;
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+}
+
+.detail-profile-section {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.detail-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background-color: #dbeafe;
+    color: #2563eb;
+    font-size: 30px;
+    font-weight: 700;
+}
+
+.detail-profile-info h2 {
+    margin-bottom: 10px;
+    color: #1e293b;
+    font-size: 22px;
+}
+
+.detail-role {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    background-color: #eff6ff;
+    color: #2563eb;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.detail-section {
+    padding: 28px 0;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.detail-section h3 {
+    margin-bottom: 14px;
+    color: #334155;
+    font-size: 16px;
+}
+
+.detail-section p {
+    color: #64748b;
+    font-size: 15px;
+    line-height: 1.7;
+}
+
+.detail-tech-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.detail-tech-stack span {
+    padding: 8px 12px;
+    border-radius: 6px;
+    background-color: #f1f5f9;
+    color: #475569;
+    font-size: 13px;
+}
+
+.detail-action {
+    padding-top: 28px;
+    text-align: right;
+}
+
+.detail-action button {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    background-color: #2563eb;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.detail-action p {
+    margin-top: 10px;
+    color: #94a3b8;
+    font-size: 12px;
+}
+
+.team-member-not-found {
+    padding: 80px 24px;
+    text-align: center;
+}
+
+.team-member-not-found h2 {
+    margin-bottom: 12px;
+    color: #1e293b;
+}
+
+.team-member-not-found p {
+    margin-bottom: 24px;
+    color: #64748b;
+}
+
+.team-member-not-found a {
+    color: #2563eb;
+    text-decoration: none;
+}
+
+/* Tablet */
+
+@media (max-width: 768px) {
+    .team-member-detail-page {
+        padding: 28px 24px;
+    }
+
+    .team-member-detail-card {
+        padding: 28px;
+    }
+
+    .team-member-detail-header h1 {
+        font-size: 25px;
+    }
+}
+
+/* Mobile */
+
+@media (max-width: 480px) {
+    .team-member-detail-page {
+        padding: 20px 16px;
+    }
+
+    .team-member-detail-header {
+        margin-bottom: 24px;
+    }
+
+    .team-member-detail-header h1 {
+        font-size: 23px;
+    }
+
+    .team-member-detail-header p {
+        font-size: 13px;
+    }
+
+    .team-member-detail-card {
+        padding: 22px 18px;
+    }
+
+    .detail-profile-section {
+        gap: 14px;
+    }
+
+    .detail-avatar {
+        width: 64px;
+        height: 64px;
+        font-size: 24px;
+    }
+
+    .detail-profile-info h2 {
+        font-size: 19px;
+    }
+
+    .detail-section {
+        padding: 22px 0;
+    }
+
+    .detail-action {
+        text-align: center;
+    }
+
+    .detail-action button {
+        width: 100%;
+    }
+}
