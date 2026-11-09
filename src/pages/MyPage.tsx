@@ -44,8 +44,103 @@ function MyPage() {
     "함께 프로젝트를 진행하며 성장하고 싶은 개발자입니다.",
   );
 
-  const handleSave = () => {
+  const [techStack, setTechStack] = useState([
+    "JavaScript",
+    "TypeScript",
+    "React",
+    "Node.js",
+    "Express",
+  ]);
+
+  const [editTechStack, setEditTechStack] = useState(techStack);
+  const [newTech, setNewTech] = useState("");
+
+  const [editNickname, setEditNickname] = useState(nickname);
+  const [editIntroduction, setEditIntroduction] = useState(introduction);
+
+  const techOptions = [
+    "JavaScript",
+    "TypeScript",
+    "React",
+    "Node.js",
+    "Express",
+    "PostgreSQL",
+    "Supabase",
+    "Python",
+    "Java",
+    "Spring",
+    "AWS",
+    "Docker",
+  ];
+
+  const handleAddTech = () => {
+    if (!newTech) {
+      alert("추가할 기술 스택을 선택해 주세요.");
+      return;
+    }
+
+    if (editTechStack.includes(newTech)) {
+      alert("이미 추가된 기술 스택입니다.");
+      return;
+    }
+
+    setEditTechStack((prev) => [...prev, newTech]);
+    setNewTech("");
+  };
+
+  const handleRemoveTech = (tech: string) => {
+    setEditTechStack((prev) => prev.filter((item) => item !== tech));
+  };
+
+  const handleEdit = () => {
+    setEditNickname(nickname);
+    setEditIntroduction(introduction);
+    setEditTechStack(techStack);
+    setIsEditing(true);
+  };
+
+  const handleCancel = () => {
+    setEditNickname(nickname);
+    setEditIntroduction(introduction);
+    setEditTechStack(techStack);
+    setNewTech("");
     setIsEditing(false);
+  };
+
+  const handleSave = () => {
+    const trimmedNickname = editNickname.trim();
+    const trimmedIntroduction = editIntroduction.trim();
+
+    if (!trimmedNickname) {
+      alert("닉네임을 입력해 주세요.");
+      return;
+    }
+
+    if (trimmedNickname.length < 2 || trimmedNickname.length > 20) {
+      alert("닉네임은 2자 이상 20자 이하로 입력해 주세요.");
+      return;
+    }
+
+    if (!trimmedIntroduction) {
+      alert("자기소개를 입력해 주세요.");
+      return;
+    }
+
+    if (trimmedIntroduction.length > 300) {
+      alert("자기소개는 300자 이하로 입력해 주세요.");
+      return;
+    }
+
+    if (editTechStack.length === 0) {
+      alert("기술 스택을 하나 이상 선택해 주세요.");
+      return;
+    }
+
+    setNickname(trimmedNickname);
+    setIntroduction(trimmedIntroduction);
+    setTechStack(editTechStack);
+    setIsEditing(false);
+
     alert("프로필이 수정되었습니다.");
   };
 
@@ -68,7 +163,7 @@ function MyPage() {
           <button
             type="button"
             className="pm-mypage__edit-button"
-            onClick={() => setIsEditing(!isEditing)}
+            onClick={isEditing ? handleCancel : handleEdit}
           >
             {isEditing ? "취소" : "프로필 수정"}
           </button>
@@ -80,16 +175,19 @@ function MyPage() {
             <input
               id="nickname"
               type="text"
-              value={nickname}
-              onChange={(event) => setNickname(event?.target.value)}
+              value={editNickname}
+              onChange={(event) => setEditNickname(event.target.value)}
+              minLength={2}
+              maxLength={20}
             />
 
             <label htmlFor="introduction">자기소개</label>
             <textarea
               id="introduction"
-              value={introduction}
-              onChange={(event) => setIntroduction(event.target.value)}
+              value={editIntroduction}
+              onChange={(event) => setEditIntroduction(event.target.value)}
               rows={3}
+              maxLength={300}
             />
 
             <button
@@ -109,13 +207,47 @@ function MyPage() {
 
         <div className="pm-mypage__tech-stack">
           <h3>기술 스택</h3>
+
           <div className="pm-mypage__tags">
-            {["JavaScript", "TypeScript", "React", "Node.js", "Express"].map(
-              (tech) => (
-                <span key={tech}>{tech}</span>
-              ),
-            )}
+            {(isEditing ? editTechStack : techStack).map((tech) => (
+              <span key={tech}>
+                {tech}
+
+                {isEditing && (
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveTech(tech)}
+                    aria-label={`${tech} 삭제`}
+                  >
+                    ×
+                  </button>
+                )}
+              </span>
+            ))}
           </div>
+
+          {isEditing && (
+            <div className="pm-mypage__tech-add">
+              <select
+                value={newTech}
+                onChange={(event) => setNewTech(event.target.value)}
+              >
+                <option value="">기술 스택 선택</option>
+
+                {techOptions
+                  .filter((tech) => !editTechStack.includes(tech))
+                  .map((tech) => (
+                    <option key={tech} value={tech}>
+                      {tech}
+                    </option>
+                  ))}
+              </select>
+
+              <button type="button" onClick={handleAddTech}>
+                추가
+              </button>
+            </div>
+          )}
         </div>
       </section>
 
