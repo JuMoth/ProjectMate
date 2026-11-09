@@ -13,8 +13,33 @@ function SignupPage() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (password.length < 8) {
-      alert("비밀번호는 8자 이상 입력해 주세요.");
+    const trimmedEmail = email.trim();
+    const trimmedNickname = nickname.trim();
+
+    if (!trimmedEmail) {
+      alert("이메일을 입력해 주세요.");
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(trimmedEmail)) {
+      alert("올바른 이메일 형식을 입력해 주세요.");
+      return;
+    }
+
+    if (!trimmedNickname) {
+      alert("닉네임을 입력해 주세요.");
+      return;
+    }
+
+    if (trimmedNickname.length < 2 || trimmedNickname.length > 20) {
+      alert("닉네임은 2자 이상 20자 이하로 입력해 주세요.");
+      return;
+    }
+
+    if (password.trim().length < 8) {
+      alert("비밀번호는 공백을 제외하고 8자 이상 입력해 주세요.");
       return;
     }
 
@@ -86,7 +111,7 @@ function SignupPage() {
             <label htmlFor="signup-password-confirm">비밀번호 확인</label>
             <input
               id="signup-password-confirm"
-              type="text"
+              type="password"
               placeholder="비밀번호를 다시 입력해 주세요."
               value={passwordConfirm}
               onChange={(event) => setPasswordConfirm(event.target.value)}
@@ -103,12 +128,14 @@ function SignupPage() {
             <span>이용약관 및 개인정보 처리방침에 동의합니다.</span>
           </label>
 
-          <button type="submit" className="pm-signup__submit">회원가입</button>
+          <button type="submit" className="pm-signup__submit">
+            회원가입
+          </button>
         </form>
 
         <div className="pm-signup__login">
-            <span>이미 계정이 있으신가요?</span>
-            <Link to="/login">로그인</Link>
+          <span>이미 계정이 있으신가요?</span>
+          <Link to="/login">로그인</Link>
         </div>
       </section>
     </main>
