@@ -149,7 +149,7 @@
   color: #64748b;
 }
 
-.team-member-footer button {
+.team-member-detail-button {
   flex-shrink: 0;
   padding: 9px 14px;
   border: none;
@@ -161,7 +161,7 @@
   transition: background 0.2s;
 }
 
-.team-member-footer button:hover {
+.team-member-detail-button:hover {
   background: #4338ca;
 }
 
@@ -262,7 +262,7 @@
     flex-direction: column;
   }
 
-  .team-member-footer button {
+  .team-member-detail-button {
     width: 100%;
   }
 
