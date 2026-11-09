@@ -33,8 +33,33 @@ function ProjectCreatePage() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (techStack.length === 0) {
+    const trimmedTitle = title.trim();
+    const trimmedDescription = description.trim();
+
+    if(!trimmedTitle) {
+      alert("프로젝트 제목을 입력해 주세요.");
+      return;
+    }
+
+    if(!trimmedDescription) {
+      alert("프로젝트 소개를 입력해 주세요.");
+      return;
+    }
+
+    if(techStack.length === 0) {
       alert("기술 스택을 하나 이상 선택해 주세요.");
+      return;
+    }
+
+    const today = new Date().toLocaleDateString("sv-SE");
+
+    if(!deadline) {
+      alert("모집 마감일을 선택해 주세요");
+      return;
+    }
+
+    if(deadline < today) {
+      alert("모집 마감일은 오늘 이후로 설정해 주세요.");
       return;
     }
 
