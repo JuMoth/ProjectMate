@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MainLayout from "./layouts/MainLayout";
 import AuthLayout from "./layouts/AuthLayout";
 
+import PageTitle from "./components/PageTitle";
+
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
@@ -18,6 +20,8 @@ import "./App.css";
 function App() {
   return (
     <BrowserRouter>
+      <PageTitle />
+
       <Routes>
         {/* 로그인 후 사용하는 공통 레이아웃 */}
         <Route element={<MainLayout />}>

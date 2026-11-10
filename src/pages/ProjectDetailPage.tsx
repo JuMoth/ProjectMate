@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 
 import "../styles/ProjectDetailPage.css";
@@ -99,6 +99,12 @@ function ProjectDetailPage() {
     (item) => item.id === Number(id) && item.deletedAt === null,
   );
 
+  useEffect(() => {
+    document.title = project
+      ? `${project.title} | ProjectMate`
+      : "프로젝트를 찾을 수 없습니다 | ProjectMate";
+  }, [project]);
+
   if (!project) {
     return (
       <main className="pm-project-detail">
@@ -165,9 +171,7 @@ function ProjectDetailPage() {
           <div className="pm-project-detail__recruit-info">
             <div>
               <span>모집 상태</span>
-              <strong>
-                {isRecruitmentClosed ? "모집 완료" : "모집 중"}
-              </strong>
+              <strong>{isRecruitmentClosed ? "모집 완료" : "모집 중"}</strong>
             </div>
 
             <div>

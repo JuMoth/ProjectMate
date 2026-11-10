@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { teamMembers } from "../data/teamMembers";
 
@@ -13,6 +14,12 @@ function TeamMemberDetailPage() {
   const { id } = useParams();
 
   const member = teamMembers.find((member) => member.id === Number(id));
+
+  useEffect(() => {
+    document.title = member
+      ? `${member.nickname} | ProjectMate`
+      : "팀원을 찾을 수 없습니다 | ProjectMate";
+  }, [member]);
 
   if (!member) {
     return (
