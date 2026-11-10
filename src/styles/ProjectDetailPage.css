@@ -1,3 +1,4 @@
+
 .pm-project-detail {
     width: 100%;
     max-width: 1000px;
@@ -49,15 +50,24 @@
 }
 
 .pm-project-detail__header h1 {
-    margin: 18px 0 12px;
+    margin: 18px 0 10px;
     color: #111827;
     font-size: 30px;
 }
 
-.pm-project-detail__header p,
-.pm-project-detail__section p {
+.pm-project-detail__header > p {
+    margin: 0;
     color: #6b7280;
-    line-height: 1.8;
+    font-size: 15px;
+}
+
+.pm-project-detail__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 20px;
+    color: #9ca3af;
+    font-size: 13px;
 }
 
 .pm-project-detail__section {
@@ -69,6 +79,13 @@
     margin: 0 0 16px;
     color: #111827;
     font-size: 19px;
+}
+
+.pm-project-detail__section > p {
+    margin: 0;
+    color: #6b7280;
+    line-height: 1.8;
+    white-space: pre-wrap;
 }
 
 .pm-project-detail__stack {
@@ -85,6 +102,71 @@
     font-size: 13px;
 }
 
+.pm-project-detail__recruit-info {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.pm-project-detail__recruit-info > div {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 18px;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    background: #f9fafb;
+}
+
+.pm-project-detail__recruit-info span {
+    color: #9ca3af;
+    font-size: 13px;
+}
+
+.pm-project-detail__recruit-info strong {
+    color: #374151;
+    font-size: 15px;
+}
+
+.pm-project-detail__recruitment {
+    margin-top: 28px;
+}
+
+.pm-project-detail__recruitment h3 {
+    margin: 0 0 14px;
+    color: #374151;
+    font-size: 15px;
+}
+
+.pm-project-detail__recruitment ul {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.pm-project-detail__recruitment li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 16px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    color: #4b5563;
+    font-size: 14px;
+}
+
+.pm-project-detail__recruitment li strong {
+    color: #4f46e5;
+}
+
+.pm-project-detail__recruitment > p {
+    color: #9ca3af;
+    font-size: 14px;
+}
+
 .pm-project-detail__actions {
     display: flex;
     justify-content: flex-end;
@@ -98,7 +180,13 @@
     background: #6366f1;
     color: #fff;
     font-size: 14px;
+    font-weight: 600;
     cursor: pointer;
+    transition: background 0.2s;
+}
+
+.pm-project-detail__actions button:hover:not(:disabled) {
+    background: #4f46e5;
 }
 
 .pm-project-detail__actions button:disabled {
@@ -128,16 +216,65 @@
     color: #4f46e5;
 }
 
+/* Tablet */
 @media (max-width: 768px) {
     .pm-project-detail {
-        padding: 28px 16px 48px;
+        padding: 28px 20px 48px;
     }
 
     .pm-project-detail__content {
-        padding: 22px;
+        padding: 24px;
     }
 
     .pm-project-detail__header h1 {
-        font-size: 25px;
+        font-size: 26px;
+    }
+
+    .pm-project-detail__recruit-info {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+    .pm-project-detail {
+        padding: 24px 16px 40px;
+    }
+
+    .pm-project-detail__content {
+        padding: 20px;
+    }
+
+    .pm-project-detail__header h1 {
+        font-size: 23px;
+    }
+
+    .pm-project-detail__meta {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .pm-project-detail__section {
+        padding: 24px 0;
+    }
+
+    .pm-project-detail__section h2 {
+        font-size: 18px;
+    }
+
+    .pm-project-detail__recruit-info {
+        grid-template-columns: 1fr;
+    }
+
+    .pm-project-detail__recruit-info > div {
+        padding: 14px;
+    }
+
+    .pm-project-detail__actions {
+        justify-content: stretch;
+    }
+
+    .pm-project-detail__actions button {
+        width: 100%;
     }
 }
