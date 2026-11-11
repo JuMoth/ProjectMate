@@ -1,111 +1,88 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 import { Link, useParams } from "react-router-dom";
 
+import { getProjectById } from "../services/project.service";
+import type { Project } from "../types/project.types";
+
 import "../styles/ProjectDetailPage.css";
-
-interface Project {
-  id: number;
-  title: string;
-  description: string;
-  techStack: string[];
-  recruitmentStatus: "모집 중" | "모집 완료";
-  recruitCount: number;
-  category: string;
-  author: string;
-  createdAt: string;
-  deadline: string;
-  deletedAt: string | null;
-  recruitmentFields: {
-    role: string;
-    count: number;
-  }[];
-}
-
-const mockProjects: Project[] = [
-  {
-    id: 1,
-    title: "ProjectMate",
-    description: "포트폴리오를 위한 프로젝트 팀원 모집 플랫폼",
-    techStack: ["React", "TypeScript", "Express"],
-    recruitmentStatus: "모집 중",
-    recruitCount: 3,
-    category: "웹 개발",
-    author: "개발자",
-    createdAt: "2026.11.01",
-    deadline: "2026.11.30",
-    deletedAt: null,
-    recruitmentFields: [
-      { role: "프론트엔드", count: 1 },
-      { role: "백엔드", count: 1 },
-      { role: "디자이너", count: 1 },
-    ],
-  },
-  {
-    id: 2,
-    title: "Study Together",
-    description: "함께 공부하고 성장하는 스터디 관리 서비스",
-    techStack: ["JavaScript", "React", "Node.js"],
-    recruitmentStatus: "모집 중",
-    recruitCount: 2,
-    category: "스터디",
-    author: "스터디장",
-    createdAt: "2026.11.03",
-    deadline: "2026.11.25",
-    deletedAt: null,
-    recruitmentFields: [
-      { role: "프론트엔드", count: 1 },
-      { role: "백엔드", count: 1 },
-    ],
-  },
-  {
-    id: 3,
-    title: "Daily Tracker",
-    description: "일상과 목표를 기록하는 생산성 관리 웹 서비스",
-    techStack: ["TypeScript", "React", "Supabase"],
-    recruitmentStatus: "모집 완료",
-    recruitCount: 0,
-    category: "웹 개발",
-    author: "기획자",
-    createdAt: "2026.10.20",
-    deadline: "2026.11.05",
-    deletedAt: null,
-    recruitmentFields: [],
-  },
-  {
-    id: 4,
-    title: "Dev Community",
-    description: "개발자들의 지식 공유 및 기술 토론 커뮤니티",
-    techStack: ["React", "Express", "PostgreSQL"],
-    recruitmentStatus: "모집 중",
-    recruitCount: 4,
-    category: "웹 개발",
-    author: "커뮤니티 운영자",
-    createdAt: "2026.11.05",
-    deadline: "2026.12.01",
-    deletedAt: null,
-    recruitmentFields: [
-      { role: "프론트엔드", count: 2 },
-      { role: "백엔드", count: 2 },
-    ],
-  },
-];
 
 function ProjectDetailPage() {
   const { id } = useParams<{ id: string }>();
 
+  const [project, setProject] = useState<Project | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [isNotFound, setIsNotFound] = useState(false);
   const [isApplied, setIsApplied] = useState(false);
+  const [retryCount, setRetryCount] = useState(0);
 
-  const project = mockProjects.find(
-    (item) => item.id === Number(id) && item.deletedAt === null,
-  );
+  useEffect(() => {
+    let isMounted = true;
+
+    const fetchProject = async () => {
+      const projectId = Number(id);
+
+      if (!Number.isInteger(projectId) || projectId <= 0) {
+        setProject(null);
+        setIsNotFound(true);
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        setIsLoading(true);
+        setError("");
+        setIsNotFound(false);
+        setProject(null);
+        setIsApplied(false);
+
+        const data = await getProjectById(projectId);
+
+        if (isMounted) {
+          setProject(data);
+        }
+      } catch (err) {
+        if (isMounted) {
+          if (axios.isAxiosError(err) && err.response?.status === 404) {
+            setIsNotFound(true);
+          } else {
+            setError("프로젝트 정보를 불러오지 못했습니다.");
+          }
+        }
+      } finally {
+        if (isMounted) {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    fetchProject();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [id, retryCount]);
 
   useEffect(() => {
     document.title = project
       ? `${project.title} | ProjectMate`
-      : "프로젝트를 찾을 수 없습니다 | ProjectMate";
-  }, [project]);
+      : isNotFound
+        ? "프로젝트를 찾을 수 없습니다 | ProjectMate"
+        : "프로젝트 상세 | ProjectMate";
+  }, [project, isNotFound]);
 
-  if (!project) {
+  if (isLoading) {
+    return (
+      <main className="pm-project-detail">
+        <section className="pm-project-detail__not-found">
+          <p>프로젝트 정보를 불러오는 중입니다...</p>
+        </section>
+      </main>
+    );
+  }
+
+  if (isNotFound) {
     return (
       <main className="pm-project-detail">
         <section className="pm-project-detail__not-found">
@@ -117,14 +94,35 @@ function ProjectDetailPage() {
     );
   }
 
-  const deadlineDate = new Date(project.deadline.replace(/\./g, "-"));
+  if (error || !project) {
+    return (
+      <main className="pm-project-detail">
+        <section className="pm-project-detail__not-found">
+          <h1>프로젝트 정보를 불러오지 못했습니다.</h1>
+          <p>{error}</p>
+
+          <button
+            type="button"
+            onClick={() => setRetryCount((count) => count + 1)}
+          >
+            다시 시도
+          </button>
+
+          <Link to="/projects">프로젝트 목록으로 돌아가기</Link>
+        </section>
+      </main>
+    );
+  }
+
+  const [year, month, day] = project.deadline.split(".").map(Number);
+  const deadlineDate = new Date(year, month - 1, day);
 
   deadlineDate.setHours(23, 59, 59, 999);
 
   const isDeadlinePassed = deadlineDate < new Date();
 
   const isRecruitmentClosed =
-    project.recruitmentStatus === "모집 완료" || isDeadlinePassed;
+    project.recruitmentStatus === "CLOSED" || isDeadlinePassed;
 
   return (
     <main className="pm-project-detail">
@@ -158,6 +156,7 @@ function ProjectDetailPage() {
 
         <section className="pm-project-detail__section">
           <h2>기술 스택</h2>
+
           <div className="pm-project-detail__stack">
             {project.techStack.map((tech) => (
               <span key={tech}>{tech}</span>
