@@ -3,6 +3,11 @@ import axios from "axios";
 import { Link, useParams } from "react-router-dom";
 
 import { getProjectById } from "../services/project.service";
+import {
+  applyToProject,
+  getMyApplication,
+} from "../services/application.service";
+
 import type { Project } from "../types/project.types";
 
 import "../styles/ProjectDetailPage.css";
@@ -14,7 +19,11 @@ function ProjectDetailPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const [isNotFound, setIsNotFound] = useState(false);
+
   const [isApplied, setIsApplied] = useState(false);
+  const [isApplying, setIsApplying] = useState(false);
+  const [applicationError, setApplicationError] = useState("");
+
   const [retryCount, setRetryCount] = useState(0);
 
   useEffect(() => {
@@ -36,11 +45,18 @@ function ProjectDetailPage() {
         setIsNotFound(false);
         setProject(null);
         setIsApplied(false);
+        setApplicationError("");
 
         const data = await getProjectById(projectId);
 
+        if (!isMounted) return;
+
+        setProject(data);
+
+        const application = await getMyApplication(projectId);
+
         if (isMounted) {
-          setProject(data);
+          setIsApplied(application !== null);
         }
       } catch (err) {
         if (isMounted) {
@@ -71,6 +87,33 @@ function ProjectDetailPage() {
         ? "프로젝트를 찾을 수 없습니다 | ProjectMate"
         : "프로젝트 상세 | ProjectMate";
   }, [project, isNotFound]);
+
+  const handleApply = async () => {
+    const projectId = Number(id);
+
+    if (!project || isRecruitmentClosed) {
+      return;
+    }
+
+    try {
+      setIsApplying(true);
+      setApplicationError("");
+
+      await applyToProject(projectId);
+
+      setIsApplied(true);
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        setApplicationError(
+          err.response?.data?.message || "참여 신청 중 오류가 발생했습니다.",
+        );
+      } else {
+        setApplicationError("참여 신청 중 오류가 발생했습니다.");
+      }
+    } finally {
+      setIsApplying(false);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -205,18 +248,19 @@ function ProjectDetailPage() {
         <div className="pm-project-detail__actions">
           <button
             type="button"
-            disabled={isRecruitmentClosed || isApplied}
-            onClick={() => {
-              setIsApplied(true);
-              alert("프로젝트 참여 신청이 완료되었습니다.");
-            }}
+            disabled={isRecruitmentClosed || isApplied || isApplying}
+            onClick={handleApply}
           >
             {isRecruitmentClosed
               ? "모집 종료"
               : isApplied
                 ? "신청 완료"
-                : "참여 신청"}
+                : isApplying
+                  ? "신청 중..."
+                  : "참여 신청"}
           </button>
+
+          {applicationError && <p role="alert">{applicationError}</p>}
         </div>
       </section>
     </main>
