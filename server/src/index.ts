@@ -1,7 +1,10 @@
 import express from "express";
 import cors from "cors";
+
 import healthRoutes from "./routes/health.routes";
 import projectRoutes from "./routes/project.routes";
+import applicationRoutes from "./routes/application.routes";
+
 import { errorHandler } from "./middlewares/error.middleware";
 import { notFoundHandler } from "./middlewares/not-found.middleware";
 
@@ -20,6 +23,7 @@ app.use(express.json());
 
 // API Routes
 app.use("/api/health", healthRoutes);
+app.use("/api/projects", applicationRoutes);
 app.use("/api/projects", projectRoutes);
 
 // 404 Middleware
