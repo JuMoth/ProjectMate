@@ -80,3 +80,63 @@
   - Express 공식 문서
   - TypeScript 공식 문서
   - Axios 공식 문서
+
+
+## 개발 기록 2. 사용자 계정 저장 및 회원가입 인증 방식 결정
+
+## 1. 결정이 필요한 상황
+- 회원가입 정보를 저장할 위치와 비밀번호 보관 방식을 정해야 했다.
+- 동일 이메일 중복 가입을 막아야 했다.
+- 가입 성공 후 JWT를 브라우저에 전달하는 방법을 정해야 했다.
+- API 오류 응답을 프로젝트의 `{ success, message, data }` 형식으로 유지해야 했다.
+
+## 2. 고려한 선택지
+- 비밀번호를 원문 또는 복호화 가능한 형태로 저장
+  - 사용자 비밀번호가 노출될 위험이 있어 선택하지 않았다.
+- 비밀번호를 bcrypt로 해시하여 저장
+  - 원래 비밀번호를 저장하지 않고 검증 가능한 해시만 보관할 수 있어 선택했다.
+- JWT를 응답 본문이나 브라우저 저장소에 저장
+  - JavaScript가 토큰에 접근할 수 있어 선택하지 않았다.
+- JWT를 HttpOnly 쿠키로 전달
+  - 브라우저 JavaScript가 토큰 값을 직접 읽지 못하게 할 수 있어 선택했다.
+
+## 3. 최종 선택 및 이유
+- 사용자 계정은 Supabase PostgreSQL의 `public.users` 테이블에 저장한다.
+- 이메일 중복은 DB의 UNIQUE 제약조건으로 막는다.
+- 비밀번호는 bcryptjs로 해시하고 cost factor는 12로 설정한다.
+- 이메일 앞뒤 공백을 제거하고 소문자로 정규화한다. 닉네임은 앞뒤 공백을 제거한다.
+- 회원가입 성공 시 JWT를 `accessToken`이라는 HttpOnly 쿠키로 설정한다.
+- 쿠키 만료는 하루로 설정하고 `SameSite=Lax`를 적용한다. `Secure`는 production 환경에서 활성화한다.
+- 프론트엔드 요청은 credentials를 포함하고, Express CORS에서도 credentials를 허용한다.
+- 입력 오류는 `400`, 이메일 중복은 `409`, 예기치 않은 서버 오류는 `500`으로 응답한다.
+- 참여 신청 데이터는 기존 구현대로 Repository의 메모리 저장소를 사용한다. PostgreSQL 연결은 이번 단계에서 사용자 계정에 적용했다.
+
+## 4. 적용 결과
+- Repository는 사용자 행을 저장하고 공개 필드만 반환한다.
+- API 응답에는 `password_hash`를 포함하지 않는다.
+- JWT는 JSON 응답 본문에 넣지 않고 HttpOnly 쿠키로 설정한다.
+- 회원가입 성공, 중복 이메일, 잘못된 이메일 요청에서 각각 `201`, `409`, `400` 응답을 확인했다.
+
+## 5. 배운 점
+- 비밀번호 해시는 저장소에 전달하기 전에 서비스 계층에서 생성한다.
+- 사용자 입력 검증과 DB 제약조건은 함께 사용해야 중복 및 잘못된 데이터 저장을 방지할 수 있다.
+- JWT 쿠키 사용에는 프론트엔드 credentials 옵션과 서버 CORS credentials 설정이 함께 필요하다.
+- 계정 저장을 PostgreSQL에 연결해도 다른 기능의 데이터 저장 구조가 자동으로 바뀌지는 않는다.
+
+## 6. 관련 자료
+- 관련 코드:
+  - `server/src/config/database.ts`
+  - `server/src/types/auth.types.ts`
+  - `server/src/respositories/auth.repository.ts`
+  - `server/src/services/auth.service.ts`
+  - `server/src/controllers/auth.controller.ts`
+  - `server/src/routes/auth.routes.ts`
+  - `server/src/middlewares/error.middleware.ts`
+  - `server/src/index.ts`
+  - `src/pages/SignupPage.tsx`
+- 테스트 캡처:
+  - `docs/images/auth/` 아래 회원가입 성공, 중복 이메일, 입력 오류, 쿠키, DB 해시 확인 캡처
+- 환경 변수:
+  - `DATABASE_URL`
+  - `JWT_SECRET`
+  - 실제 환경 변수 값은 저장소에 기록하지 않는다.
