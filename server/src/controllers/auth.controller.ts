@@ -40,7 +40,7 @@ export const signup = async (
             data: user,
         };
 
-        res.status(200).json(response);
+        res.status(201).json(response);
     } catch(error) {
         next(error);
     }
