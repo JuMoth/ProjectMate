@@ -9,8 +9,9 @@ function SignupPage() {
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [nickname, setNickname] = useState("");
   const [agreeTerms, setAgreeTerms] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const trimmedEmail = email.trim();
@@ -53,9 +54,39 @@ function SignupPage() {
       return;
     }
 
-    alert(
-      "현재는 화면 구현 단계입니다. 회원가입 기능은 아직 지원하지 않습니다.",
-    );
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch("http://localhost:4000/api/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          email: trimmedEmail,
+          password,
+          nickname: trimmedNickname,
+        }),
+      });
+
+      const result: {
+        success: boolean;
+        message: string;
+        data: unknown;
+      } = await response.json();
+
+      if(!response.ok || !result.success) {
+        alert(result.message);
+        return;
+      }
+
+      alert(result.message);
+    } catch {
+      alert("서버에 연결할 수 없습니다. 서버가 실행 중인지 확인해 주세요.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -128,8 +159,8 @@ function SignupPage() {
             <span>이용약관 및 개인정보 처리방침에 동의합니다.</span>
           </label>
 
-          <button type="submit" className="pm-signup__submit">
-            회원가입
+          <button type="submit" className="pm-signup__submit" disabled={isSubmitting}>
+            {isSubmitting ? "가입 중..." : "회원가입"}
           </button>
         </form>
 
