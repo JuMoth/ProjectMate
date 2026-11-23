@@ -1,9 +1,11 @@
 import express from "express";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 
 import healthRoutes from "./routes/health.routes";
 import projectRoutes from "./routes/project.routes";
 import applicationRoutes from "./routes/application.routes";
+import authRoutes from "./routes/auth.routes";
 
 import { errorHandler } from "./middlewares/error.middleware";
 import { notFoundHandler } from "./middlewares/not-found.middleware";
@@ -15,16 +17,19 @@ const PORT = 4000;
 app.use(
     cors({
         origin: "http://localhost:5173",
+        credentials: true,
     })
 );
 
-// JSON 요청 데이터 처리
+// JSON 요청 데이터 처리 & 쿠키 처리
 app.use(express.json());
+app.use(cookieParser());
 
 // API Routes
 app.use("/api/health", healthRoutes);
 app.use("/api/projects", applicationRoutes);
 app.use("/api/projects", projectRoutes);
+app.use("/api/auth", authRoutes);
 
 // 404 Middleware
 app.use(notFoundHandler);

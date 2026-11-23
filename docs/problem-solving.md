@@ -71,3 +71,54 @@ router.post("/:id/applications", createApplicationController);
 - 측정 결과 및 스크린샷:
   - docs/images/project-application/application-success.png
   - docs/images/project-application/application-completed.png
+
+
+## 개발 기록 2. 회원가입 API 응답 상태 코드 및 검증 처리
+
+## 1. 문제 상황
+- 회원가입 API를 호출했을 때 성공 응답이 `200 OK`로 반환됐다.
+- 새 사용자를 생성하는 요청의 성공 상태 코드는 `201 Created`로 맞추기로 했다.
+- 잘못된 입력과 중복 이메일을 서로 다른 상태 코드로 처리할 필요가 있었다.
+
+## 2. 원인 분석
+- `auth.controller.ts`에서 회원가입 성공 응답 상태 코드를 `200`으로 지정했다.
+- 회원가입 서비스에서 발생한 입력 오류와 PostgreSQL UNIQUE 제약조건 위반을 공통 오류 미들웨어가 구분해 응답해야 했다.
+
+## 3. 해결 방법
+- 컨트롤러의 회원가입 성공 응답을 `201 Created`로 수정했다.
+- 서비스에서 잘못된 입력은 `AuthServiceError`의 상태 코드 `400`으로 처리했다.
+- 이메일 중복으로 발생한 PostgreSQL 오류 코드 `23505`는 `409 Conflict`로 변환했다.
+- 오류 미들웨어에서 `AuthServiceError`의 상태 코드와 메시지를 API 응답에 반영했다.
+
+## 4. 개선 결과
+- 회원가입 성공: `201 Created`
+- 이미 가입된 이메일: `409 Conflict`
+- 잘못된 이메일 형식: `400 Bad Request`
+- 성공 응답에는 공개 사용자 정보만 포함되며 `password_hash`와 JWT는 JSON 본문에 포함되지 않는다.
+- 개발자 도구에서 `accessToken` 쿠키가 생성되고 `HttpOnly`, `SameSite=Lax` 설정을 확인했다.
+- 테스트 이메일로 사용자 행과 bcrypt 해시 접두부를 확인했다. 해시 전체 값은 조회하거나 기록하지 않았다.
+
+## 5. 배운 점
+- 요청이 성공하더라도 API 상태 코드가 정한 규약과 맞는지 확인해야 한다.
+- 프론트엔드 검증은 사용자의 입력을 안내하고, 서버 검증은 직접 전달된 잘못된 요청을 처리한다.
+- DB UNIQUE 제약조건을 기준으로 중복 가입을 막아야 동시 요청에서도 일관되게 처리할 수 있다.
+- JWT를 응답 본문 대신 HttpOnly 쿠키로 전달하면 브라우저 JavaScript에서 토큰을 직접 읽지 못하게 할 수 있다.
+
+## 6. 관련 자료
+- 관련 코드:
+  - `server/src/controllers/auth.controller.ts`
+  - `server/src/routes/auth.routes.ts`
+  - `server/src/services/auth.service.ts`
+  - `server/src/respositories/auth.repository.ts`
+  - `server/src/middlewares/error.middleware.ts`
+  - `server/src/index.ts`
+  - `src/pages/SignupPage.tsx`
+- 테스트 캡처:
+  - `docs/images/auth/signup-success-201-header.png`
+  - `docs/images/auth/signup-success-201-response.png`
+  - `docs/images/auth/signup-duplicate-email-409-header.png`
+  - `docs/images/auth/signup-duplicate-email-409-response.png`
+  - `docs/images/auth/signup-invalid-email-400-header.png`
+  - `docs/images/auth/signup-invalid-email-400-response.png`
+  - `docs/images/auth/signup-accessToken-cookie-flags.png`
+  - `docs/images/auth/signup-db-hash-check.png`
