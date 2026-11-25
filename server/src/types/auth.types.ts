@@ -16,3 +16,8 @@ export interface ApiResponse<T> {
     message: string;
     data: T | null;
 }
+
+export interface LoginRequestBody {
+    email: string;
+    password: string;
+}

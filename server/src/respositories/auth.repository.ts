@@ -8,6 +8,10 @@ interface UserRow {
     created_at: Date;
 }
 
+interface UserWithPasswordHash extends UserRow {
+    password_hash: string;
+}
+
 export const createUser = async (
     email: string,
     passwordHash: string,
@@ -29,3 +33,17 @@ export const createUser = async (
         created_at: user.created_at.toISOString(),
     };
 };
+
+export const findUserByEmail = async (
+    email: string,
+): Promise<UserWithPasswordHash | null> => {
+    const result = await pool.query<UserWithPasswordHash>(
+        `SELECT id, email, password_hash, nickname, created_at
+         FROM public.users
+         WHERE email = $1
+         LIMIT 1`,
+        [email],
+    );
+
+    return result.rows[0] ?? null;
+}

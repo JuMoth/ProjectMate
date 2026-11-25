@@ -1,7 +1,15 @@
 import bcrypt from "bcryptjs";
 
-import { createUser } from "../respositories/auth.repository";
-import type { PublicUser, SignupRequestBody } from "../types/auth.types";
+import {
+    createUser,
+    findUserByEmail
+} from "../respositories/auth.repository";
+
+import type {
+    LoginRequestBody,
+    PublicUser,
+    SignupRequestBody,
+} from "../types/auth.types";
 
 export class AuthServiceError extends Error {
     constructor(
@@ -92,3 +100,55 @@ export const registerUser = async (
         throw error;
     }
 }
+
+export const loginUser = async (
+    body: LoginRequestBody,
+): Promise<PublicUser> => {
+    if(typeof body !== "object" || body === null) {
+        throw new AuthServiceError("입력값을 확인해 주세요.", 400);
+    }
+
+    const { email, password } = body;
+
+    if(typeof email !== "string" || typeof password !== "string") {
+        throw new AuthServiceError("이메일과 비밀번호를 입력해 주세요.", 400);
+    }
+
+    const normalizedEmail = email.trim().toLowerCase();
+
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail)) {
+        throw new AuthServiceError("올바름 이메일 형식을 입력해 주세요.", 400);
+    }
+
+    if(password.trim().length < 8) {
+        throw new AuthServiceError("비밀번호를 확인해 주세요.", 400);
+    }
+
+    const user = await findUserByEmail(normalizedEmail);
+
+    if(!user) {
+        throw new AuthServiceError(
+            "이메일 또는 비밀번호가 올바르지 않습니다.",
+            401,
+        );
+    }
+
+    const passwordMatches = await bcrypt.compare(
+        password,
+        user.password_hash,
+    );
+
+    if(!passwordMatches) {
+        throw new AuthServiceError(
+            "이메일 또는 비밀번호가 올바르지 않습니다.",
+            401,
+        );
+    }
+
+    return {
+        id: user.id,
+        email: user.email,
+        nickname: user.nickname,
+        created_at: user.created_at.toISOString(),
+    };
+};
